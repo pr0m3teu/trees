@@ -15,13 +15,25 @@ struct Node {
     int data;
 };
 
+typedef struct node_t node_t;
+
+struct node_t {
+    node_t* left;
+    node_t* right;
+    int value;
+};
+
+// Normal Trees
 void add_node(Node* parent, Node* child);
 void add_nodes_with_null(Node* first, ...);
 
 void df(Node *start);
-Node* dfs(Node *start, int data);
-
 void bf(Node *start, bool first);
+
+// Binary Trees
+node_t* init_node(int value);
+void add_left(node_t *parent, node_t *child);
+void add_right(node_t *parent, node_t *child);
 
 
 #ifdef TREE_IMPLEMENTATION
@@ -89,16 +101,6 @@ void df(Node* start)
     }
 }
 
-Node* dfs(Node *start, int data)
-{
-    if (start->data == data) return start;
-    for (size_t i = 0; i < start->num_children; i++)
-    {
-        return dfs(start->children[i], data);
-    }
-    return NULL;
-}
-
 void bf(Node *start, bool first)
 {
     if (start == NULL) return;
@@ -109,6 +111,31 @@ void bf(Node *start, bool first)
         printf("%d ", start->children[i]->data);
     }
     for (size_t i = 0; i < start->num_children; ++i) bf(start->children[i], false);
+}
+
+// Binary Trees
+
+node_t* init_node(int value)
+{
+    node_t *node = malloc(sizeof(node_t));
+    check_ptr(node);
+
+    node->left = NULL;
+    node->right = NULL;
+    node->value = value;
+    return node;
+}
+
+void add_left(node_t *parent, node_t *child)
+{
+    if (parent == NULL) return;
+    parent->left = child;
+}
+
+void add_right(node_t *parent, node_t *child)
+{
+    if (parent == NULL) return;
+    parent->right = child;
 }
 
 #endif // TREE_IMPLEMENTATION
